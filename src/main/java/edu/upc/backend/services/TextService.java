@@ -44,7 +44,7 @@ public class TextService {
             @ApiResponse(code = 201, message = "Successful", response = Team.class),
             @ApiResponse(code = 404, message = "User not found", response = Team.class)
     })
-    @Path("/user/{id}/team")
+    @Path("/team/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTeam(@PathParam("id") String id)
     {
@@ -52,6 +52,26 @@ public class TextService {
         TeamDAO _teams = TeamDAO.getInstance();
         try {
             Team res = _teams.find(Integer.parseInt(id));
+            return Response.status(201).entity(res).build();
+        }
+        catch (Exception e) { Response.status((404)).entity(e.getMessage()).build(); }
+        return Response.status((404)).build();
+    }
+
+    @GET
+    @ApiOperation(value = "Get team by team Name", notes = "Hola k ase")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful", response = Team.class),
+            @ApiResponse(code = 404, message = "User not found", response = Team.class)
+    })
+    @Path("/user/{teamName}/team")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTeamByTeamName(@PathParam("teamName") String teamName)
+    {
+        log.info("Trying to find team with name " + teamName);
+        TeamDAO _teams = TeamDAO.getInstance();
+        try {
+            Team res = _teams.find(teamName);
             return Response.status(201).entity(res).build();
         }
         catch (Exception e) { Response.status((404)).entity(e.getMessage()).build(); }

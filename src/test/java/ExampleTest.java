@@ -6,6 +6,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.naming.NameNotFoundException;
+
 public class ExampleTest {
 
     private static final Logger log = Logger.getLogger(ExampleTest.class);
@@ -33,6 +35,12 @@ public class ExampleTest {
     public void testDAO()
     {
         Team res = _teams.find(0);
+        log.info(res.toString());
+    }
+
+    @Test
+    public void testDAO2() throws NameNotFoundException {
+        Team res = _teams.find("porxinos");
         log.info(res.toString());
     }
 }

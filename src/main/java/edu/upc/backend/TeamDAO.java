@@ -2,9 +2,14 @@ package edu.upc.backend;
 
 import edu.upc.backend.models.Member;
 import edu.upc.backend.models.Team;
+import org.apache.log4j.Logger;
 
+import javax.naming.NameNotFoundException;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * DAO de ejemplo
@@ -12,7 +17,7 @@ import java.util.List;
 public class TeamDAO implements  IModel{
 
     List<Team> _teams;
-
+    Logger log = Logger.getLogger(TeamDAO.class);
     static private TeamDAO _instance;
     static public TeamDAO getInstance()
     {
@@ -35,4 +40,15 @@ public class TeamDAO implements  IModel{
     public Team find(int id) {
         return _teams.get(id);
     }
+
+    @Override
+    public Team find(String teamName) throws NameNotFoundException {
+        Stream<Team> buffer = _teams.stream();
+        Optional<Team> res = buffer.filter((x)->x.getTeam().equals(teamName)).findFirst();
+        if(!res.isPresent()) throw new NameNotFoundException("Team with name " + teamName + " was not found");
+
+        return res.get();
+    }
+
+
 }
